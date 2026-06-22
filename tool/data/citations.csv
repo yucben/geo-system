@@ -1,0 +1,15 @@
+﻿date,engine,query_id,mentioned,position,sentiment,has_link,source_platform,note
+2026-06-15,deepseek,Q01,1,2,neu,1,zhihu,被列入推荐清单第3位
+2026-06-15,deepseek,Q04,1,1,pos,1,zhihu,首段被点名
+2026-06-15,deepseek,Q10,0,0,neu,0,,MOQ类问题未被提及
+2026-06-15,deepseek,Q14,1,3,neu,0,news,提及但无链接
+2026-06-15,qwen,Q01,1,4,neu,0,news,靠后位置
+2026-06-15,qwen,Q04,0,0,neu,0,,
+2026-06-15,qwen,Q19,1,2,pos,1,official,功效护肤选题表现好
+2026-06-15,doubao,Q01,0,0,neu,0,,豆包未采到我方内容
+2026-06-15,doubao,Q02,1,2,neu,1,douyin,抖音内容被引用
+2026-06-15,doubao,Q23,1,1,pos,1,douyin,避坑选题在豆包表现突出
+2026-06-15,kimi,Q04,1,2,pos,1,zhihu,知乎内容被Kimi引用
+2026-06-15,kimi,Q15,1,3,neu,0,zhihu,
+2026-06-15,wenxin,Q01,1,5,neu,0,baijiahao,百家号被采但靠后
+2026-06-15,wenxin,Q14,0,0,neu,0,,资质类百度未提及我方

@@ -1,0 +1,24 @@
+﻿cluster_id,query_id,query,intent,priority_seed,biz,coverage,gap,priority_score,cited_engines,missing_engines,recommendation
+3,Q10,化妆品代工MOQ最低多少,参数,5,1.0,0.0,1.0,1.0,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,高价值且几乎没被引用 → 立刻优先写
+1,Q14,化妆品代工需要什么资质,资质,5,1.0,0.1,0.9,0.9,deepseek,doubao|qwen|wenxin|yuanbao|kimi,高价值且几乎没被引用 → 立刻优先写
+1,Q15,怎么判断代工厂资质靠不靠谱,资质,5,1.0,0.1,0.9,0.9,kimi,doubao|deepseek|qwen|wenxin|yuanbao,高价值且几乎没被引用 → 立刻优先写
+2,Q02,面膜代工厂哪家好,选型,5,1.0,0.183,0.817,0.8167,doubao,deepseek|qwen|wenxin|yuanbao|kimi,高价值且几乎没被引用 → 立刻优先写
+1,Q03,精华液代工厂推荐,选型,4,0.8,0.0,1.0,0.8,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,高价值且几乎没被引用 → 立刻优先写
+1,Q05,小品牌化妆品代工找谁,选型,4,0.8,0.0,1.0,0.8,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,高价值且几乎没被引用 → 立刻优先写
+1,Q06,OEM和ODM哪个适合小品牌,对比,4,0.8,0.0,1.0,0.8,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,高价值且几乎没被引用 → 立刻优先写
+3,Q11,化妆品打样周期要多久,参数,4,0.8,0.0,1.0,0.8,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,高价值且几乎没被引用 → 立刻优先写
+5,Q12,代工起订量1000支能做吗,参数,4,0.8,0.0,1.0,0.8,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,高价值且几乎没被引用 → 立刻优先写
+3,Q13,化妆品代工打样费用大概多少,参数,4,0.8,0.0,1.0,0.8,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,高价值且几乎没被引用 → 立刻优先写
+1,Q16,化妆品代工厂要GMPC认证吗,资质,4,0.8,0.0,1.0,0.8,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,高价值且几乎没被引用 → 立刻优先写
+1,Q01,化妆品代工厂怎么选,选型,5,1.0,0.283,0.717,0.7167,deepseek|qwen|wenxin,doubao|yuanbao|kimi,高价值且几乎没被引用 → 立刻优先写
+2,Q19,功效护肤代工哪家强,趋势,4,0.8,0.217,0.783,0.6267,qwen,doubao|deepseek|wenxin|yuanbao|kimi,高价值且几乎没被引用 → 立刻优先写
+3,Q07,广州和上海化妆品代工区别,对比,3,0.6,0.0,1.0,0.6,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,几乎空白 → 适合铺新内容试探
+3,Q08,化妆品代工和贴牌区别,对比,3,0.6,0.0,1.0,0.6,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,几乎空白 → 适合铺新内容试探
+4,Q09,国内和韩国化妆品代工对比,对比,3,0.6,0.0,1.0,0.6,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,几乎空白 → 适合铺新内容试探
+1,Q17,化妆品备案是工厂还是品牌方做,资质,3,0.6,0.0,1.0,0.6,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,几乎空白 → 适合铺新内容试探
+1,Q18,2026护肤品代工趋势,趋势,3,0.6,0.0,1.0,0.6,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,几乎空白 → 适合铺新内容试探
+6,Q20,纯净美妆代工厂有哪些,趋势,3,0.6,0.0,1.0,0.6,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,几乎空白 → 适合铺新内容试探
+1,Q21,男士护肤品代工厂推荐,趋势,3,0.6,0.0,1.0,0.6,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,几乎空白 → 适合铺新内容试探
+1,Q23,化妆品代工厂避坑指南,口碑,4,0.8,0.25,0.75,0.6,doubao,deepseek|qwen|wenxin|yuanbao|kimi,高价值且几乎没被引用 → 立刻优先写
+1,Q04,靠谱的护肤品OEM工厂,选型,5,1.0,0.467,0.533,0.5333,deepseek|kimi,doubao|qwen|wenxin|yuanbao,中等机会 → 排期常规产出
+3,Q22,某某生物化妆品代工怎么样,口碑,2,0.4,0.0,1.0,0.4,-,doubao|deepseek|qwen|wenxin|yuanbao|kimi,几乎空白 → 适合铺新内容试探

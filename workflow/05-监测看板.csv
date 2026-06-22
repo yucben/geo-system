@@ -1,0 +1,4 @@
+date,engine,query_id,mentioned,position,sentiment,has_link,source_platform,note
+说明行,以下为示例可删除,Q__,1=被提及/0=没有,被提及时排第几位1-5,pos正面/neu中性/neg负面,1=给了链接/0=没有,引用来自哪个平台,任意备注
+2026-06-15,deepseek,Q01,1,2,neu,1,zhihu,被列入推荐清单第3位
+2026-06-15,doubao,Q23,1,1,pos,1,douyin,避坑选题在豆包表现突出

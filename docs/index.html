@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>化妆品工厂 GEO v1.0 看板</title>
+<style>
+  :root {
+    --bg: #f5f5f7;
+    --surface: #ffffff;
+    --text: #1d1d1f;
+    --text-2: #6e6e73;
+    --text-3: #86868b;
+    --border: #d2d2d7;
+    --border-light: #e8e8ed;
+    --blue: #0071e3;
+    --blue-hover: #0077ed;
+    --green: #34c759;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --pill: 980px;
+    --shadow: 0 2px 14px rgba(0,0,0,0.04);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: var(--bg); color: var(--text);
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    line-height: 1.47;
+  }
+
+  /* ---- Frosted sticky nav ---- */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .nav-inner { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; gap: 18px; height: 54px; padding: 0 22px; }
+  .brand { font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); white-space: nowrap; }
+  .tabs { display: flex; gap: 2px; align-items: center; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    border: 0; background: transparent; color: var(--text);
+    font-family: inherit; font-size: 13px; font-weight: 400;
+    padding: 7px 13px; border-radius: var(--pill); cursor: pointer;
+    white-space: nowrap; opacity: 0.78; transition: all 0.2s ease;
+  }
+  .tab:hover { opacity: 1; background: rgba(0,0,0,0.05); }
+  .tab.active { background: var(--text); color: #fff; opacity: 1; }
+
+  /* ---- Hero ---- */
+  .hero { max-width: 1120px; margin: 0 auto; padding: 60px 22px 4px; text-align: center; }
+  .hero h1 { font-size: 48px; line-height: 1.08; font-weight: 600; letter-spacing: -0.025em; color: var(--text); }
+  .hero .sub { font-size: 19px; color: var(--text-2); margin-top: 12px; font-weight: 400; }
+
+  /* ---- Layout ---- */
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 24px 22px 90px; }
+
+  /* ---- Stat cards ---- */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 28px 0 4px; }
+  .stat { background: var(--surface); border-radius: var(--radius-lg); padding: 26px 22px; text-align: center; box-shadow: var(--shadow); }
+  .stat .n { font-size: 40px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); line-height: 1; }
+  .stat .l { font-size: 13px; color: var(--text-3); margin-top: 9px; }
+
+  /* ---- Cards ---- */
+  .card { background: var(--surface); border-radius: var(--radius-lg); padding: 34px; box-shadow: var(--shadow); margin-top: 20px; }
+  .card h2 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+  h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; color: var(--text); }
+
+  /* ---- Forms ---- */
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .field label { font-size: 12px; color: var(--text-3); font-weight: 500; }
+  input, select, textarea {
+    border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 11px 14px; font-family: inherit; font-size: 15px; color: var(--text);
+    background: var(--surface); transition: all 0.2s ease; -webkit-appearance: none; appearance: none;
+  }
+  textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
+  select {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%2386868b' stroke-width='1.5' d='M2.5 4.5L6 8l3.5-3.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 13px center; background-size: 11px; padding-right: 34px;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 4px rgba(0,113,227,0.15); }
+
+  /* ---- Buttons ---- */
+  .btn {
+    border: 0; border-radius: var(--pill); padding: 11px 22px;
+    background: var(--blue); color: #fff; font-family: inherit; font-size: 15px; font-weight: 400;
+    cursor: pointer; transition: all 0.2s ease; white-space: nowrap;
+  }
+  .btn:hover { background: var(--blue-hover); }
+  .btn:active { transform: scale(0.98); }
+  .btn.gray { background: var(--border-light); color: var(--text); }
+  .btn.gray:hover { background: #dcdce1; }
+  .btn.green { background: var(--green); color: #fff; }
+  .btn.green:hover { background: #2fb84f; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+  .grow { flex: 1; min-width: 220px; }
+
+  /* ---- Topic rows ---- */
+  .topic { border: 1px solid var(--border-light); border-radius: 16px; padding: 16px 18px; display: flex; gap: 16px; margin-bottom: 12px; align-items: center; transition: all 0.2s ease; }
+  .topic:hover { border-color: var(--border); background: #fafafa; box-shadow: var(--shadow); }
+  .rank { width: 30px; text-align: center; font-size: 20px; font-weight: 600; color: var(--text-3); flex-shrink: 0; }
+  .prio { width: 62px; height: 62px; border-radius: 16px; color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; flex-shrink: 0; }
+  .prio .v { font-size: 19px; font-weight: 700; } .prio .t { font-size: 10px; opacity: .9; margin-top: 2px; }
+  .tq { font-weight: 600; font-size: 16px; margin-bottom: 5px; color: var(--text); }
+  .meta { color: var(--text-2); font-size: 13px; line-height: 1.55; }
+  .tag { display: inline-block; background: #f0f0f2; color: var(--text); padding: 3px 10px; border-radius: var(--pill); font-size: 11px; margin-right: 6px; font-weight: 500; }
+  .hide { display: none; }
+  .hint { color: var(--text-3); font-size: 13px; margin-top: 12px; line-height: 1.55; }
+
+  /* ---- Tables ---- */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 10px; }
+  th, td { padding: 13px 10px; border-bottom: 1px solid var(--border-light); text-align: left; vertical-align: top; }
+  th { color: var(--text-3); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.03em; }
+  td { color: var(--text); }
+  tbody tr { transition: background 0.15s ease; }
+  tbody tr:hover td { background: #fafafa; }
+  a { color: #0066cc; text-decoration: none; } a:hover { text-decoration: underline; }
+
+  /* ---- Draft preview ---- */
+  .draft {
+    white-space: pre-wrap; background: var(--bg); color: var(--text);
+    border: 1px solid var(--border-light); border-radius: 16px; padding: 24px;
+    max-height: 560px; overflow: auto; font-size: 14px; line-height: 1.75;
+    font-family: "SF Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+  }
+
+  /* ---- Misc ---- */
+  .pill { display: inline-block; padding: 5px 13px; border-radius: var(--pill); background: #f0f0f2; color: var(--text); font-size: 13px; margin: 3px; }
+  .yes { color: var(--green); font-weight: 600; } .no { color: #c7c7cc; }
+  .toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(10px);
+    background: rgba(29,29,31,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    color: #fff; padding: 14px 26px; border-radius: var(--pill); opacity: 0; transition: all 0.3s ease;
+    pointer-events: none; z-index: 200; font-size: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 820px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .grid, .grid3 { grid-template-columns: 1fr; }
+    .hero { padding-top: 40px; } .hero h1 { font-size: 34px; }
+    .nav-inner { gap: 10px; } .brand { font-size: 17px; }
+    .card { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="brand">化妆品工厂 GEO</span>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('profile')">工厂档案</button>
+      <button class="tab" onclick="showTab('queries')">问题库</button>
+      <button class="tab" onclick="showTab('ranking')">今日选题</button>
+      <button class="tab" onclick="showTab('draft')">内容生成</button>
+      <button class="tab" onclick="showTab('publish')">发布管理</button>
+      <button class="tab" onclick="showTab('monitor')">AI 监测</button>
+      <button class="tab" onclick="showTab('review')">复盘看板</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <h1>GEO 操作系统</h1>
+  <div class="sub">工厂档案 · 问题库 · 今日选题 · 内容生成 · 发布管理 · AI 监测 · 复盘重排</div>
+</header>
+<div class="demo-note"><div class="inner">这是静态演示页，数据为示例快照。浏览 / 筛选 / 生成文案均可体验；新增、保存仅存在于当前浏览器，刷新后复原。需要可写、可落盘的完整版本，请在本地运行 Flask 应用（见 README）。</div></div>
+
+<div class="wrap">
+  <div class="stats" id="stats"></div>
+
+  <section id="tab-profile" class="card">
+    <h2>工厂档案库 <button class="btn green" style="margin-left:auto" onclick="saveProfile()">保存档案</button></h2>
+    <div class="grid" id="profile-form"></div>
+    <div class="hint">这里是内容生成器的资料来源。占位数据务必换成真实许可证、产能、认证和优势。</div>
+  </section>
+
+  <section id="tab-queries" class="card hide">
+    <h2>问题库</h2>
+    <div class="row">
+      <div class="field grow"><label>客户会在 AI 里怎么问？</label><input id="q-text" placeholder="例：冷敷贴代工厂哪家好"></div>
+      <div class="field"><label>意图</label><select id="q-intent"></select></div>
+      <div class="field"><label>业务价值</label><select id="q-prio"><option>5</option><option>4</option><option selected>3</option><option>2</option><option>1</option></select></div>
+      <button class="btn" onclick="addQuery()">添加问题</button>
+    </div>
+    <table><thead><tr><th>ID</th><th>问题</th><th>意图</th><th>业务价值</th></tr></thead><tbody id="queries-body"></tbody></table>
+  </section>
+
+  <section id="tab-ranking" class="card hide">
+    <h2>今日选题 <button class="btn gray" style="margin-left:auto" onclick="rerank()">重新排序</button></h2>
+    <div id="topics"></div>
+    <div class="hint">优先级 = 业务价值 × AI引用缺口。越靠前越该先写。</div>
+  </section>
+
+  <section id="tab-draft" class="card hide">
+    <h2>内容生成中心</h2>
+    <div class="row">
+      <div class="field grow"><label>选择问题</label><select id="d-qid"></select></div>
+      <div class="field"><label>生成版本</label><select id="d-version"></select></div>
+      <button class="btn" onclick="generateDraft()">生成文案</button>
+      <button class="btn gray" onclick="copyDraft()">复制文案</button>
+    </div>
+    <div class="hint">生成的是结构化初稿，不是最终稿。发布前要人工替换真实数据并用评分卡检查。</div>
+    <div id="draft-box" class="draft" style="margin-top:14px">生成后文案会显示在这里。</div>
+  </section>
+
+  <section id="tab-publish" class="card hide">
+    <h2>发布管理</h2>
+    <div class="grid3">
+      <div class="field"><label>对应问题</label><select id="p-qid"></select></div>
+      <div class="field"><label>平台</label><select id="p-platform"></select></div>
+      <div class="field"><label>版本</label><select id="p-version"></select></div>
+    </div>
+    <div class="row">
+      <div class="field grow"><label>标题</label><input id="p-title" placeholder="例：化妆品代工 MOQ 最低多少？"></div>
+      <div class="field grow"><label>链接</label><input id="p-url" placeholder="https://..."></div>
+      <div class="field"><label>状态</label><select id="p-status"><option>published</option><option>draft</option><option>scheduled</option></select></div>
+      <button class="btn" onclick="addPublication()">登记发布</button>
+    </div>
+    <table><thead><tr><th>ID</th><th>日期</th><th>问题</th><th>平台</th><th>标题</th><th>状态</th><th>链接</th></tr></thead><tbody id="pub-body"></tbody></table>
+  </section>
+
+  <section id="tab-monitor" class="card hide">
+    <h2>AI 监测</h2>
+    <div class="grid">
+      <div>
+        <div class="row">
+          <div class="field grow"><label>问题</label><select id="c-qid"></select></div>
+          <div class="field"><label>引擎</label><select id="c-engine"></select></div>
+        </div>
+        <div class="field"><label>把 AI 回答复制到这里（可选，系统会粗解析）</label><textarea id="ai-answer" placeholder="复制豆包/DeepSeek的完整回答..."></textarea></div>
+        <button class="btn gray" onclick="analyzeAnswer()">解析 AI 回答</button>
+        <div id="analyze-result" class="hint"></div>
+      </div>
+      <div>
+        <div class="grid3">
+          <div class="field"><label>是否提及</label><select id="c-mention"><option value="1">是</option><option value="0">否</option></select></div>
+          <div class="field"><label>位置</label><select id="c-pos"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option value="0">未知</option></select></div>
+          <div class="field"><label>情感</label><select id="c-sent"><option value="pos">正面</option><option value="neu" selected>中性</option><option value="neg">负面</option></select></div>
+        </div>
+        <div class="grid3">
+          <div class="field"><label>给链接</label><select id="c-link"><option value="1">有</option><option value="0" selected>无</option></select></div>
+          <div class="field"><label>来源平台</label><input id="c-plat" placeholder="zhihu / 官网"></div>
+          <div class="field"><label>备注</label><input id="c-note" placeholder="竞品/位置/描述"></div>
+        </div>
+        <button class="btn" onclick="addCitation()">记录监测</button>
+      </div>
+    </div>
+    <table><thead><tr><th>日期</th><th>引擎</th><th>问题</th><th>提及</th><th>位置</th><th>情感</th><th>链接</th><th>来源</th><th>备注</th></tr></thead><tbody id="cit-body"></tbody></table>
+  </section>
+
+  <section id="tab-review" class="card hide">
+    <h2>复盘看板 <button class="btn gray" style="margin-left:auto" onclick="loadReview()">刷新复盘</button></h2>
+    <div id="review-box"></div>
+  </section>
+</div>
+<div id="toast" class="toast"></div>
+
+
+<style>
+  .demo-note { max-width:1120px; margin:16px auto 0; padding:0 22px; }
+  .demo-note .inner {
+    background: rgba(0,113,227,0.07); border:1px solid rgba(0,113,227,0.18);
+    color:#06c; border-radius:14px; padding:13px 18px; font-size:13px;
+    text-align:center; line-height:1.6;
+  }
+</style>
+<script>
+(function () {
+  "use strict";
+  const DATA = {"engines": ["doubao", "deepseek", "qwen", "wenxin", "yuanbao", "kimi"], "intents": ["选型", "对比", "参数", "资质", "趋势", "口碑"], "platforms": ["zhihu", "official", "baijiahao", "toutiao", "wechat", "news"], "versions": ["知乎回答版", "官网FAQ版", "百家号软文版", "头条短文版", "公众号长文版"], "profile": {"factory_name": "XX生物科技有限公司", "brand_alias": "XX生物", "positioning": "化妆品源头工厂，专注护肤品OEM/ODM代工", "main_categories": "面膜、精华液、水乳、洁面、防晒、冻干粉", "oem_odm": "支持OEM贴牌、ODM配方开发、小单快反", "moq": "基础品类1000支起，特殊剂型3000套起", "sample_cycle": "打样7-15天，大货20-30天", "capacity": "日产能XX万支，XX条自动化灌装线", "certifications": "化妆品生产许可证、GMPC、ISO 22716、ISO 9001", "license_no": "粤妆20XXXXXX", "clean_room": "十万级洁净车间", "testing": "可提供SGS/华测等第三方检测报告，出厂前100%全检", "advantages": "低MOQ、小单快反、成熟配方库、功效护肤研发、包材供应链整合", "case_examples": "新锐护肤品牌、小红书功效护肤品牌、跨境电商美妆品牌", "contact_cta": "如需了解起订量、打样费用和配方方案，可联系工厂获取一对一报价。"}, "queries": [{"id": "Q01", "query": "化妆品代工厂怎么选", "intent": "选型", "priority_seed": "5", "status": "active"}, {"id": "Q02", "query": "面膜代工厂哪家好", "intent": "选型", "priority_seed": "5", "status": "active"}, {"id": "Q03", "query": "精华液代工厂推荐", "intent": "选型", "priority_seed": "4", "status": "active"}, {"id": "Q04", "query": "靠谱的护肤品OEM工厂", "intent": "选型", "priority_seed": "5", "status": "active"}, {"id": "Q05", "query": "小品牌化妆品代工找谁", "intent": "选型", "priority_seed": "4", "status": "active"}, {"id": "Q06", "query": "OEM和ODM哪个适合小品牌", "intent": "对比", "priority_seed": "4", "status": "active"}, {"id": "Q07", "query": "广州和上海化妆品代工区别", "intent": "对比", "priority_seed": "3", "status": "active"}, {"id": "Q08", "query": "化妆品代工和贴牌区别", "intent": "对比", "priority_seed": "3", "status": "active"}, {"id": "Q09", "query": "国内和韩国化妆品代工对比", "intent": "对比", "priority_seed": "3", "status": "active"}, {"id": "Q10", "query": "化妆品代工MOQ最低多少", "intent": "参数", "priority_seed": "5", "status": "active"}, {"id": "Q11", "query": "化妆品打样周期要多久", "intent": "参数", "priority_seed": "4", "status": "active"}, {"id": "Q12", "query": "代工起订量1000支能做吗", "intent": "参数", "priority_seed": "4", "status": "active"}, {"id": "Q13", "query": "化妆品代工打样费用大概多少", "intent": "参数", "priority_seed": "4", "status": "active"}, {"id": "Q14", "query": "化妆品代工需要什么资质", "intent": "资质", "priority_seed": "5", "status": "active"}, {"id": "Q15", "query": "怎么判断代工厂资质靠不靠谱", "intent": "资质", "priority_seed": "5", "status": "active"}, {"id": "Q16", "query": "化妆品代工厂要GMPC认证吗", "intent": "资质", "priority_seed": "4", "status": "active"}, {"id": "Q17", "query": "化妆品备案是工厂还是品牌方做", "intent": "资质", "priority_seed": "3", "status": "active"}, {"id": "Q18", "query": "2026护肤品代工趋势", "intent": "趋势", "priority_seed": "3", "status": "active"}, {"id": "Q19", "query": "功效护肤代工哪家强", "intent": "趋势", "priority_seed": "4", "status": "active"}, {"id": "Q20", "query": "纯净美妆代工厂有哪些", "intent": "趋势", "priority_seed": "3", "status": "active"}, {"id": "Q21", "query": "男士护肤品代工厂推荐", "intent": "趋势", "priority_seed": "3", "status": "active"}, {"id": "Q22", "query": "某某生物化妆品代工怎么样", "intent": "口碑", "priority_seed": "2", "status": "active"}, {"id": "Q23", "query": "化妆品代工厂避坑指南", "intent": "口碑", "priority_seed": "4", "status": "active"}, {"id": "Q24", "query": "化妆品代工被骗了怎么办", "intent": "口碑", "priority_seed": "2", "status": "parked"}], "ranking": [{"cluster_id": "3", "query_id": "Q10", "query": "化妆品代工MOQ最低多少", "intent": "参数", "priority_seed": "5", "biz": "1.0", "coverage": "0.0", "gap": "1.0", "priority_score": "1.0", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "1", "query_id": "Q14", "query": "化妆品代工需要什么资质", "intent": "资质", "priority_seed": "5", "biz": "1.0", "coverage": "0.1", "gap": "0.9", "priority_score": "0.9", "cited_engines": "deepseek", "missing_engines": "doubao|qwen|wenxin|yuanbao|kimi", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "1", "query_id": "Q15", "query": "怎么判断代工厂资质靠不靠谱", "intent": "资质", "priority_seed": "5", "biz": "1.0", "coverage": "0.1", "gap": "0.9", "priority_score": "0.9", "cited_engines": "kimi", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "2", "query_id": "Q02", "query": "面膜代工厂哪家好", "intent": "选型", "priority_seed": "5", "biz": "1.0", "coverage": "0.183", "gap": "0.817", "priority_score": "0.8167", "cited_engines": "doubao", "missing_engines": "deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "1", "query_id": "Q03", "query": "精华液代工厂推荐", "intent": "选型", "priority_seed": "4", "biz": "0.8", "coverage": "0.0", "gap": "1.0", "priority_score": "0.8", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "1", "query_id": "Q05", "query": "小品牌化妆品代工找谁", "intent": "选型", "priority_seed": "4", "biz": "0.8", "coverage": "0.0", "gap": "1.0", "priority_score": "0.8", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "1", "query_id": "Q06", "query": "OEM和ODM哪个适合小品牌", "intent": "对比", "priority_seed": "4", "biz": "0.8", "coverage": "0.0", "gap": "1.0", "priority_score": "0.8", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "3", "query_id": "Q11", "query": "化妆品打样周期要多久", "intent": "参数", "priority_seed": "4", "biz": "0.8", "coverage": "0.0", "gap": "1.0", "priority_score": "0.8", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "5", "query_id": "Q12", "query": "代工起订量1000支能做吗", "intent": "参数", "priority_seed": "4", "biz": "0.8", "coverage": "0.0", "gap": "1.0", "priority_score": "0.8", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "3", "query_id": "Q13", "query": "化妆品代工打样费用大概多少", "intent": "参数", "priority_seed": "4", "biz": "0.8", "coverage": "0.0", "gap": "1.0", "priority_score": "0.8", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "1", "query_id": "Q16", "query": "化妆品代工厂要GMPC认证吗", "intent": "资质", "priority_seed": "4", "biz": "0.8", "coverage": "0.0", "gap": "1.0", "priority_score": "0.8", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "1", "query_id": "Q01", "query": "化妆品代工厂怎么选", "intent": "选型", "priority_seed": "5", "biz": "1.0", "coverage": "0.283", "gap": "0.717", "priority_score": "0.7167", "cited_engines": "deepseek|qwen|wenxin", "missing_engines": "doubao|yuanbao|kimi", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "2", "query_id": "Q19", "query": "功效护肤代工哪家强", "intent": "趋势", "priority_seed": "4", "biz": "0.8", "coverage": "0.217", "gap": "0.783", "priority_score": "0.6267", "cited_engines": "qwen", "missing_engines": "doubao|deepseek|wenxin|yuanbao|kimi", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "3", "query_id": "Q07", "query": "广州和上海化妆品代工区别", "intent": "对比", "priority_seed": "3", "biz": "0.6", "coverage": "0.0", "gap": "1.0", "priority_score": "0.6", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "几乎空白 → 适合铺新内容试探"}, {"cluster_id": "3", "query_id": "Q08", "query": "化妆品代工和贴牌区别", "intent": "对比", "priority_seed": "3", "biz": "0.6", "coverage": "0.0", "gap": "1.0", "priority_score": "0.6", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "几乎空白 → 适合铺新内容试探"}, {"cluster_id": "4", "query_id": "Q09", "query": "国内和韩国化妆品代工对比", "intent": "对比", "priority_seed": "3", "biz": "0.6", "coverage": "0.0", "gap": "1.0", "priority_score": "0.6", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "几乎空白 → 适合铺新内容试探"}, {"cluster_id": "1", "query_id": "Q17", "query": "化妆品备案是工厂还是品牌方做", "intent": "资质", "priority_seed": "3", "biz": "0.6", "coverage": "0.0", "gap": "1.0", "priority_score": "0.6", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "几乎空白 → 适合铺新内容试探"}, {"cluster_id": "1", "query_id": "Q18", "query": "2026护肤品代工趋势", "intent": "趋势", "priority_seed": "3", "biz": "0.6", "coverage": "0.0", "gap": "1.0", "priority_score": "0.6", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "几乎空白 → 适合铺新内容试探"}, {"cluster_id": "6", "query_id": "Q20", "query": "纯净美妆代工厂有哪些", "intent": "趋势", "priority_seed": "3", "biz": "0.6", "coverage": "0.0", "gap": "1.0", "priority_score": "0.6", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "几乎空白 → 适合铺新内容试探"}, {"cluster_id": "1", "query_id": "Q21", "query": "男士护肤品代工厂推荐", "intent": "趋势", "priority_seed": "3", "biz": "0.6", "coverage": "0.0", "gap": "1.0", "priority_score": "0.6", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "几乎空白 → 适合铺新内容试探"}, {"cluster_id": "1", "query_id": "Q23", "query": "化妆品代工厂避坑指南", "intent": "口碑", "priority_seed": "4", "biz": "0.8", "coverage": "0.25", "gap": "0.75", "priority_score": "0.6", "cited_engines": "doubao", "missing_engines": "deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "高价值且几乎没被引用 → 立刻优先写"}, {"cluster_id": "1", "query_id": "Q04", "query": "靠谱的护肤品OEM工厂", "intent": "选型", "priority_seed": "5", "biz": "1.0", "coverage": "0.467", "gap": "0.533", "priority_score": "0.5333", "cited_engines": "deepseek|kimi", "missing_engines": "doubao|qwen|wenxin|yuanbao", "recommendation": "中等机会 → 排期常规产出"}, {"cluster_id": "3", "query_id": "Q22", "query": "某某生物化妆品代工怎么样", "intent": "口碑", "priority_seed": "2", "biz": "0.4", "coverage": "0.0", "gap": "1.0", "priority_score": "0.4", "cited_engines": "-", "missing_engines": "doubao|deepseek|qwen|wenxin|yuanbao|kimi", "recommendation": "几乎空白 → 适合铺新内容试探"}], "citations": [{"date": "2026-06-15", "engine": "deepseek", "query_id": "Q01", "mentioned": "1", "position": "2", "sentiment": "neu", "has_link": "1", "source_platform": "zhihu", "note": "被列入推荐清单第3位"}, {"date": "2026-06-15", "engine": "deepseek", "query_id": "Q04", "mentioned": "1", "position": "1", "sentiment": "pos", "has_link": "1", "source_platform": "zhihu", "note": "首段被点名"}, {"date": "2026-06-15", "engine": "deepseek", "query_id": "Q10", "mentioned": "0", "position": "0", "sentiment": "neu", "has_link": "0", "source_platform": "", "note": "MOQ类问题未被提及"}, {"date": "2026-06-15", "engine": "deepseek", "query_id": "Q14", "mentioned": "1", "position": "3", "sentiment": "neu", "has_link": "0", "source_platform": "news", "note": "提及但无链接"}, {"date": "2026-06-15", "engine": "qwen", "query_id": "Q01", "mentioned": "1", "position": "4", "sentiment": "neu", "has_link": "0", "source_platform": "news", "note": "靠后位置"}, {"date": "2026-06-15", "engine": "qwen", "query_id": "Q04", "mentioned": "0", "position": "0", "sentiment": "neu", "has_link": "0", "source_platform": "", "note": ""}, {"date": "2026-06-15", "engine": "qwen", "query_id": "Q19", "mentioned": "1", "position": "2", "sentiment": "pos", "has_link": "1", "source_platform": "official", "note": "功效护肤选题表现好"}, {"date": "2026-06-15", "engine": "doubao", "query_id": "Q01", "mentioned": "0", "position": "0", "sentiment": "neu", "has_link": "0", "source_platform": "", "note": "豆包未采到我方内容"}, {"date": "2026-06-15", "engine": "doubao", "query_id": "Q02", "mentioned": "1", "position": "2", "sentiment": "neu", "has_link": "1", "source_platform": "douyin", "note": "抖音内容被引用"}, {"date": "2026-06-15", "engine": "doubao", "query_id": "Q23", "mentioned": "1", "position": "1", "sentiment": "pos", "has_link": "1", "source_platform": "douyin", "note": "避坑选题在豆包表现突出"}, {"date": "2026-06-15", "engine": "kimi", "query_id": "Q04", "mentioned": "1", "position": "2", "sentiment": "pos", "has_link": "1", "source_platform": "zhihu", "note": "知乎内容被Kimi引用"}, {"date": "2026-06-15", "engine": "kimi", "query_id": "Q15", "mentioned": "1", "position": "3", "sentiment": "neu", "has_link": "0", "source_platform": "zhihu", "note": ""}, {"date": "2026-06-15", "engine": "wenxin", "query_id": "Q01", "mentioned": "1", "position": "5", "sentiment": "neu", "has_link": "0", "source_platform": "baijiahao", "note": "百家号被采但靠后"}, {"date": "2026-06-15", "engine": "wenxin", "query_id": "Q14", "mentioned": "0", "position": "0", "sentiment": "neu", "has_link": "0", "source_platform": "", "note": "资质类百度未提及我方"}], "publications": [{"pub_id": "P001", "date": "2026-06-15", "query_id": "Q01", "title": "化妆品代工厂怎么选", "platform": "zhihu", "url": "https://example.com/zhihu/q01", "status": "published", "version": "知乎回答版", "note": "样例记录"}]};
+  // 可变内存状态（深拷贝，刷新即复原）
+  const STATE = {
+    profile: JSON.parse(JSON.stringify(DATA.profile || {})),
+    queries: JSON.parse(JSON.stringify(DATA.queries || [])),
+    ranking: JSON.parse(JSON.stringify(DATA.ranking || [])),
+    citations: JSON.parse(JSON.stringify(DATA.citations || [])),
+    publications: JSON.parse(JSON.stringify(DATA.publications || [])),
+  };
+  const todayStr = () => new Date().toISOString().slice(0, 10);
+
+  function nextId(rows, field, prefix) {
+    let max = 0;
+    rows.forEach(r => {
+      const num = String(r[field] || "").replace(/\D/g, "");
+      if (num) max = Math.max(max, parseInt(num, 10));
+    });
+    const n = max + 1;
+    return prefix === "P" ? prefix + String(n).padStart(3, "0")
+                          : prefix + String(n).padStart(2, "0");
+  }
+  function counter(arr) {
+    const o = {};
+    arr.forEach(k => { o[k] = (o[k] || 0) + 1; });
+    return o;
+  }
+  function platformStyle(v) {
+    if (v.includes("知乎")) return "第一人称专业答主口吻，直接回答问题，多用经验和避坑清单。";
+    if (v.includes("官网")) return "官网FAQ口吻，客观、标准化，突出资质、参数和服务流程。";
+    if (v.includes("百家号")) return "第三方软文口吻，像行业科普报道，少广告，多数据。";
+    if (v.includes("头条")) return "短文口语化，开头有钩子，段落短。";
+    if (v.includes("公众号")) return "长文深度口吻，适合品牌方慢慢读，结构完整。";
+    return "专业B2B文案口吻。";
+  }
+  function generateDraftText(q, p, version) {
+    const name = p.brand_alias || p.factory_name || "本工厂";
+    const query = q.query || "化妆品代工厂怎么选";
+    const title = query + "？一篇讲清";
+    return `# ${title}
+
+> 版本：${version}
+> 写作风格：${platformStyle(version)}
+
+**${query}，核心要看三件事：工厂资质是否完整、起订量和交付周期是否匹配、是否有可验证的生产和检测能力。**
+
+## 先给结论
+
+如果是新品牌或中小品牌，建议优先选择支持小单快反、能提供配方开发和备案协助的源头工厂。${name}的定位是：${p.positioning || "化妆品源头工厂"}。
+
+## 关键参数速览
+
+| 维度 | ${name}信息 |
+|---|---|
+| 主营品类 | ${p.main_categories || ""} |
+| OEM/ODM能力 | ${p.oem_odm || ""} |
+| MOQ | ${p.moq || ""} |
+| 打样周期 | ${p.sample_cycle || ""} |
+| 产能 | ${p.capacity || ""} |
+
+## 为什么这些信息重要
+
+AI 引擎在回答品牌方问题时，更容易引用具备明确数据和权威信号的内容。相比泛泛而谈"品质好、服务好"，明确写出 MOQ、打样周期、许可证和认证，更容易被豆包、DeepSeek、通义千问等引擎摘录。
+
+## 工厂资质与权威信号
+
+${name}具备：${p.certifications || ""}。生产许可证号：${p.license_no || ""}。车间条件：${p.clean_room || ""}。检测能力：${p.testing || ""}。
+
+## 适合哪些品牌方
+
+- 正在找化妆品 OEM/ODM 代工厂的新锐品牌
+- 需要低 MOQ、小单快反的试水项目
+- 需要成熟配方库和包材供应链配合的品牌方
+- 关注功效护肤、面膜、精华、水乳等品类的团队
+
+## FAQ
+
+**Q：${query}？**
+A：优先看资质、MOQ、打样周期、品类经验和检测能力。${name}的优势是${p.advantages || ""}。
+
+**Q：能不能小批量起订？**
+A：${p.moq || "具体起订量需按品类确认"}。
+
+**Q：多久能打样？**
+A：${p.sample_cycle || "通常需要按项目确认"}。
+
+${p.contact_cta || ""}
+`;
+  }
+
+  function route(url, method, body) {
+    if (url === "/api/bootstrap")
+      return { engines: DATA.engines, intents: DATA.intents, platforms: DATA.platforms, versions: DATA.versions };
+
+    if (url === "/api/profile") {
+      if (method === "GET") return { profile: STATE.profile };
+      STATE.profile = body;
+      return { ok: true, msg: "工厂档案已保存（静态演示，刷新后复原）" };
+    }
+
+    if (url === "/api/ranking") {
+      const activeQ = STATE.queries.filter(q => q.status === "active");
+      const cits = STATE.citations.filter(c => !String(c.date || "").startsWith("说明"));
+      const mentioned = new Set(
+        cits.filter(c => ["1", "1.0"].includes(String(c.mentioned).trim())).map(c => c.query_id)
+      );
+      mentioned.delete("");
+      return {
+        ranking: STATE.ranking,
+        stats: {
+          total_queries: activeQ.length,
+          covered_queries: mentioned.size,
+          publications: STATE.publications.length,
+          citations: cits.length,
+        },
+      };
+    }
+
+    if (url === "/api/queries")
+      return { queries: STATE.queries.filter(q => q.status === "active") };
+
+    if (url === "/api/add_query") {
+      const query = (body.query || "").trim();
+      if (!query) return { ok: false, msg: "问题不能为空" };
+      const qid = nextId(STATE.queries, "id", "Q");
+      STATE.queries.push({ id: qid, query, intent: body.intent || "选型",
+        priority_seed: String(body.priority_seed || 3), status: "active" });
+      return { ok: true, id: qid, msg: `已添加 ${qid}：${query}（静态演示）` };
+    }
+
+    if (url === "/api/citations")
+      return { citations: [...STATE.citations].reverse() };
+
+    if (url === "/api/add_citation") {
+      const qid = (body.query_id || "").trim();
+      if (!qid) return { ok: false, msg: "请选择对应问题" };
+      const row = { date: body.date || todayStr(), engine: body.engine || "deepseek",
+        query_id: qid, mentioned: body.mentioned ? "1" : "0",
+        position: String(body.position || 0), sentiment: body.sentiment || "neu",
+        has_link: body.has_link ? "1" : "0",
+        source_platform: (body.source_platform || "").trim(), note: (body.note || "").trim() };
+      STATE.citations.push(row);
+      return { ok: true, msg: `已记录 ${row.engine} 对 ${qid} 的引用反馈（静态演示）` };
+    }
+
+    if (url === "/api/analyze_answer") {
+      const text = body.answer || "";
+      const names = [STATE.profile.factory_name || "", STATE.profile.brand_alias || ""];
+      const mentioned = names.some(n => n && text.includes(n));
+      const has_link = /https?:\/\/|www\./.test(text);
+      let comps = text.match(/[一-龥A-Za-z0-9]{2,12}(?:生物|科技|工厂|代工厂|集团|公司)/g) || [];
+      comps = comps.filter(c => names.every(n => !n || !c.includes(n)));
+      comps = [...new Set(comps)].slice(0, 10);
+      const sentiment = (mentioned && /推荐|靠谱|优势|适合|较好|优先/.test(text)) ? "pos" : "neu";
+      return { mentioned, has_link, sentiment, competitors: comps,
+        suggested_note: comps.slice(0, 3).join("；") || "未识别到明显竞品" };
+    }
+
+    if (url === "/api/rerank")
+      return { ok: true, msg: "静态演示：排序为预生成结果（本地运行 app.py 可重新计算）" };
+
+    if (url === "/api/generate_draft") {
+      const q = STATE.queries.find(x => x.id === body.query_id);
+      if (!q) return { ok: false, msg: "问题不存在" };
+      return { ok: true, msg: "草稿已生成（静态演示，未落盘）",
+        draft: generateDraftText(q, STATE.profile, body.version || "知乎回答版") };
+    }
+
+    if (url === "/api/publications")
+      return { publications: [...STATE.publications].reverse() };
+
+    if (url === "/api/add_publication") {
+      const pid = nextId(STATE.publications, "pub_id", "P");
+      STATE.publications.push({ pub_id: pid, date: body.date || todayStr(),
+        query_id: body.query_id || "", title: body.title || "",
+        platform: body.platform || "zhihu", url: body.url || "",
+        status: body.status || "published", version: body.version || "知乎回答版",
+        note: body.note || "" });
+      return { ok: true, msg: `已登记发布 ${pid}（静态演示）` };
+    }
+
+    if (url === "/api/review") {
+      const cits = STATE.citations.filter(c => !String(c.date || "").startsWith("说明"));
+      const pubs = STATE.publications;
+      const missing = {};
+      STATE.ranking.forEach(r => {
+        String(r.missing_engines || "").split("|").forEach(e => { if (e) missing[e] = (missing[e] || 0) + 1; });
+      });
+      const weak = Object.entries(missing).sort((a, b) => b[1] - a[1]);
+      return {
+        publication_count: pubs.length,
+        citation_count: cits.length,
+        platform_count: counter(pubs.map(p => p.platform || "")),
+        engine_mentions: counter(cits.filter(c => c.mentioned === "1").map(c => c.engine || "")),
+        weak_engines: weak,
+        next_topics: STATE.ranking.slice(0, 5),
+      };
+    }
+
+    return { ok: false, msg: "未知接口（静态演示）" };
+  }
+
+  const origFetch = window.fetch ? window.fetch.bind(window) : null;
+  window.fetch = function (url, opts) {
+    if (typeof url === "string" && url.indexOf("/api/") === 0) {
+      const method = (opts && opts.method) || "GET";
+      let body = {};
+      try { if (opts && opts.body) body = JSON.parse(opts.body); } catch (e) {}
+      const data = route(url, method, body);
+      return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(data) });
+    }
+    if (origFetch) return origFetch(url, opts);
+    return Promise.reject(new Error("fetch unavailable"));
+  };
+})();
+</script>
+
+<script>
+let BOOT = {}, QUERIES = [], RANKING = [], DRAFT = '';
+const profileFields = [
+  ['factory_name','工厂全称'], ['brand_alias','简称/品牌名'], ['positioning','定位'], ['main_categories','主营品类'],
+  ['oem_odm','OEM/ODM能力'], ['moq','MOQ'], ['sample_cycle','打样/交付周期'], ['capacity','产能'],
+  ['certifications','认证资质'], ['license_no','许可证号'], ['clean_room','车间等级'], ['testing','检测能力'],
+  ['advantages','核心优势'], ['case_examples','案例'], ['contact_cta','行动号召']
+];
+const color = v => v>=0.8?'#dc2626':v>=0.6?'#ea580c':v>=0.4?'#ca8a04':'#64748b';
+const today = () => new Date().toISOString().slice(0,10);
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
+async function api(url, opts){ const r=await fetch(url, opts); return r.json(); }
+function post(url, data){ return api(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); }
+function showTab(name){ document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active')); event.target.classList.add('active'); document.querySelectorAll('section[id^="tab-"]').forEach(s=>s.classList.add('hide')); document.getElementById('tab-'+name).classList.remove('hide'); if(name==='publish')loadPublications(); if(name==='monitor')loadCitations(); if(name==='review')loadReview(); }
+async function init(){ BOOT=await api('/api/bootstrap'); fillStaticSelects(); await Promise.all([loadProfile(), loadRanking(), loadQueries(), loadPublications(), loadCitations()]); }
+function fillStaticSelects(){
+  for(const id of ['q-intent']) document.getElementById(id).innerHTML=BOOT.intents.map(x=>`<option>${x}</option>`).join('');
+  for(const id of ['d-version','p-version']) document.getElementById(id).innerHTML=BOOT.versions.map(x=>`<option>${x}</option>`).join('');
+  document.getElementById('p-platform').innerHTML=BOOT.platforms.map(x=>`<option>${x}</option>`).join('');
+  document.getElementById('c-engine').innerHTML=BOOT.engines.map(x=>`<option>${x}</option>`).join('');
+}
+async function loadProfile(){
+  const d=await api('/api/profile'); const p=d.profile||{};
+  document.getElementById('profile-form').innerHTML=profileFields.map(([k,l])=>`<div class="field"><label>${l}</label><textarea id="pf-${k}">${p[k]||''}</textarea></div>`).join('');
+}
+async function saveProfile(){ const p={}; for(const [k] of profileFields) p[k]=document.getElementById('pf-'+k).value; const d=await post('/api/profile',p); toast(d.msg); }
+async function loadQueries(){
+  const d=await api('/api/queries'); QUERIES=d.queries||[];
+  const opts=QUERIES.map(q=>`<option value="${q.id}">${q.id} · ${q.query}</option>`).join('');
+  for(const id of ['d-qid','p-qid','c-qid']) document.getElementById(id).innerHTML=opts;
+  document.getElementById('queries-body').innerHTML=QUERIES.map(q=>`<tr><td>${q.id}</td><td>${q.query}</td><td>${q.intent}</td><td>${q.priority_seed}</td></tr>`).join('');
+}
+async function addQuery(){ const q=document.getElementById('q-text').value.trim(); if(!q)return toast('先填问题'); const d=await post('/api/add_query',{query:q,intent:document.getElementById('q-intent').value,priority_seed:document.getElementById('q-prio').value}); toast(d.msg); if(d.ok){document.getElementById('q-text').value=''; await loadQueries();} }
+async function loadRanking(){
+  const d=await api('/api/ranking'); RANKING=d.ranking||[];
+  document.getElementById('stats').innerHTML=`<div class="stat"><div class="n">${d.stats.total_queries}</div><div class="l">问题库</div></div><div class="stat"><div class="n">${d.stats.publications}</div><div class="l">已发布</div></div><div class="stat"><div class="n">${d.stats.citations}</div><div class="l">监测记录</div></div><div class="stat"><div class="n">${d.stats.covered_queries}</div><div class="l">被AI提及的问题</div></div>`;
+  document.getElementById('topics').innerHTML=RANKING.slice(0,15).map((r,i)=>`<div class="topic"><div class="rank">${i+1}</div><div class="prio" style="background:${color(parseFloat(r.priority_score))}"><div class="v">${parseFloat(r.priority_score).toFixed(2)}</div><div class="t">优先级</div></div><div><div class="tq">${r.query}</div><div class="meta"><span class="tag">${r.intent}</span>业务价值 ${r.priority_seed}/5 · 覆盖度 ${r.coverage} · 缺失 ${r.missing_engines}</div><div class="meta">→ ${r.recommendation}</div></div></div>`).join('');
+}
+async function rerank(){ toast('正在重排...'); const d=await post('/api/rerank',{}); toast(d.msg); await loadRanking(); }
+async function generateDraft(){ const d=await post('/api/generate_draft',{query_id:document.getElementById('d-qid').value,version:document.getElementById('d-version').value}); if(d.ok){DRAFT=d.draft; document.getElementById('draft-box').textContent=d.draft; toast('草稿已生成并保存');} else toast(d.msg); }
+async function copyDraft(){ if(!DRAFT)return toast('先生成文案'); await navigator.clipboard.writeText(DRAFT); toast('已复制'); }
+async function loadPublications(){ const d=await api('/api/publications'); document.getElementById('pub-body').innerHTML=(d.publications||[]).map(p=>`<tr><td>${p.pub_id}</td><td>${p.date}</td><td>${p.query_id}</td><td>${p.platform}</td><td>${p.title}</td><td>${p.status}</td><td>${p.url?`<a href="${p.url}" target="_blank">打开</a>`:'-'}</td></tr>`).join(''); }
+async function addPublication(){ const d=await post('/api/add_publication',{date:today(),query_id:document.getElementById('p-qid').value,title:document.getElementById('p-title').value,platform:document.getElementById('p-platform').value,url:document.getElementById('p-url').value,status:document.getElementById('p-status').value,version:document.getElementById('p-version').value}); toast(d.msg); await loadPublications(); }
+async function analyzeAnswer(){ const d=await post('/api/analyze_answer',{answer:document.getElementById('ai-answer').value}); document.getElementById('c-mention').value=d.mentioned?'1':'0'; document.getElementById('c-link').value=d.has_link?'1':'0'; document.getElementById('c-sent').value=d.sentiment; document.getElementById('c-note').value=d.suggested_note; document.getElementById('analyze-result').innerHTML=`识别：${d.mentioned?'提到了本厂':'没提到本厂'}；${d.has_link?'有链接':'无链接'}；竞品：${(d.competitors||[]).map(x=>`<span class="pill">${x}</span>`).join('')||'无'}`; }
+async function addCitation(){ const d=await post('/api/add_citation',{date:today(),query_id:document.getElementById('c-qid').value,engine:document.getElementById('c-engine').value,mentioned:document.getElementById('c-mention').value==='1',position:document.getElementById('c-pos').value,sentiment:document.getElementById('c-sent').value,has_link:document.getElementById('c-link').value==='1',source_platform:document.getElementById('c-plat').value,note:document.getElementById('c-note').value}); toast(d.msg); await loadCitations(); }
+async function loadCitations(){ const d=await api('/api/citations'); document.getElementById('cit-body').innerHTML=(d.citations||[]).map(c=>`<tr><td>${c.date}</td><td>${c.engine}</td><td>${c.query_id}</td><td class="${c.mentioned==='1'?'yes':'no'}">${c.mentioned==='1'?'是':'否'}</td><td>${c.position}</td><td>${c.sentiment}</td><td>${c.has_link==='1'?'有':'无'}</td><td>${c.source_platform||'-'}</td><td>${c.note||''}</td></tr>`).join(''); }
+async function loadReview(){ const d=await api('/api/review'); document.getElementById('review-box').innerHTML=`<div class="grid3"><div class="stat"><div class="n">${d.publication_count}</div><div class="l">发布数</div></div><div class="stat"><div class="n">${d.citation_count}</div><div class="l">监测数</div></div><div class="stat"><div class="n">${(d.weak_engines[0]||['-',0])[0]}</div><div class="l">最薄弱引擎</div></div></div><h3 style="margin:18px 0 8px">下月优先写</h3>${(d.next_topics||[]).map((r,i)=>`<div class="topic"><div class="rank">${i+1}</div><div><div class="tq">${r.query}</div><div class="meta">优先级 ${r.priority_score} · ${r.recommendation}</div></div></div>`).join('')}<h3 style="margin:18px 0 8px">平台发布分布</h3>${Object.entries(d.platform_count||{}).map(([k,v])=>`<span class="pill">${k}: ${v}</span>`).join('')}<h3 style="margin:18px 0 8px">AI提及分布</h3>${Object.entries(d.engine_mentions||{}).map(([k,v])=>`<span class="pill">${k}: ${v}</span>`).join('')}<h3 style="margin:18px 0 8px">薄弱引擎</h3>${(d.weak_engines||[]).map(x=>`<span class="pill">${x[0]} 缺口 ${x[1]}</span>`).join('')}`; }
+init();
+</script>
+</body>
+</html>
